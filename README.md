@@ -8,7 +8,8 @@ Het is niet de bedoeling dat de battle assistant de fantasie overneemt, hij moet
 **Inzicht geven in**
 * Wie zijn er aanwezig bij het conflict?
 * Wie hoort er bij wie?
-* Hoe levend is iedereen nog?
+* Hoe levend is de party nog?
+* Hoe levend zijn de enemies nog? (Optioneel in te stellen door DM)
 
 
 ## Versie 1
