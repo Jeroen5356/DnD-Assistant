@@ -1,0 +1,83 @@
+﻿@page "/Conflict/"
+@inject NavigationManager navigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.AspNetCore.SignalR.Client
+@using ViewModels
+@using BattleAssistant.Components
+
+    <div class="container">
+
+        @if (_conflictViewModel == null)
+        {
+            <h3>No Conflict yet</h3>
+        }
+        else
+        {
+            <div class="row justify-content-center">
+                <h3 class="col-auto">Conflict @_conflictViewModel.ConflictName</h3>
+            </div>
+            @if (_conflictViewModel.Teams != null && _conflictViewModel.Teams.Any())
+            {
+                <div class="row align-items-center">
+                    @foreach(var team in _conflictViewModel.Teams)
+                    {
+                        <Team TeamViewModel="team"/>
+                        @*<div class="col-4">
+                        </div>
+                        <div class="col-4 offset-4">
+                            Test2
+                        </div>*@
+                    }
+                </div>
+                    
+            }
+
+
+
+
+
+
+        }
+    </div>
+
+@code {
+    private ConflictViewModel _conflictViewModel { get; set; }
+    private Guid _conflictId;
+    private HubConnection _hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        SetConflictId();
+
+        await ConnectToHubAsync();
+
+        _conflictViewModel = await _hubConnection.InvokeAsync<ConflictViewModel>("GetConflict", _conflictId);
+    }
+}
+
+@functions{
+
+    private void SetConflictId()
+    {
+        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("Id", out var idStringValues))
+        {
+            var idString = idStringValues.First();
+            if (Guid.TryParse(idString, out var conflictId))
+            {
+                _conflictId = conflictId;
+            }
+        }
+    }
+
+    private async Task ConnectToHubAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+        .WithUrl(navigationManager.ToAbsoluteUri("/conflictHub"))
+        .Build();
+
+        //StateHasChanged();
+        await _hubConnection.StartAsync();
+    }
+}

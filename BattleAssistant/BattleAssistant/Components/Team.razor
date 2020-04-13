@@ -1,0 +1,13 @@
+﻿
+@using ViewModels
+
+@if (TeamViewModel != null)
+{
+    <h3>Team @TeamViewModel.Name</h3>
+}
+
+
+@code {
+    [Parameter]
+    public TeamViewModel TeamViewModel { get; set; }
+}
