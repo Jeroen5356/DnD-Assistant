@@ -29,6 +29,6 @@ namespace BattleAssistant.ViewModels
 
         public Guid ConflictId { get; set; }
         public string ConflictName { get; set; }
-        public ICollection<TeamViewModel> Teams { get; set; }
+        public List<TeamViewModel> Teams { get; set; }
     }
 }

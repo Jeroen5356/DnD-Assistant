@@ -5,38 +5,27 @@
 @using ViewModels
 @using BattleAssistant.Components
 
-    <div class="container">
-
+    <div class="container justify-content-center">
         @if (_conflictViewModel == null)
         {
             <h3>No Conflict yet</h3>
         }
         else
         {
-            <div class="row justify-content-center">
-                <h3 class="col-auto">Conflict @_conflictViewModel.ConflictName</h3>
+            <div class="row">
+                <h3 class="col text-center">Conflict @_conflictViewModel.ConflictName</h3>
             </div>
             @if (_conflictViewModel.Teams != null && _conflictViewModel.Teams.Any())
             {
-                <div class="row align-items-center">
-                    @foreach(var team in _conflictViewModel.Teams)
+                <div class="row">
+                    @for (var i = 0; i < _conflictViewModel.Teams.Count; i++)
                     {
-                        <Team TeamViewModel="team"/>
-                        @*<div class="col-4">
+                        <div class="col text-center">
+                            <Team TeamViewModel="_conflictViewModel.Teams[i]" />
                         </div>
-                        <div class="col-4 offset-4">
-                            Test2
-                        </div>*@
                     }
-                </div>
-                    
+                </div> 
             }
-
-
-
-
-
-
         }
     </div>
 
