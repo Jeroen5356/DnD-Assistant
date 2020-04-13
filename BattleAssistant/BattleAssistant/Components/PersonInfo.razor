@@ -1,9 +1,12 @@
 ﻿@using ViewModels
 
-    <div class="row">
-        <div class="col-8">@PersonViewModel.Name (@PersonViewModel.PersonInfo.Level)</div>
-        <div class="col-4">@PersonViewModel.PersonInfo.CurrentHealth / @PersonViewModel.PersonInfo.MaxHealth</div>
-    </div>
+<div class="row">
+    <div class="col-8">@PersonViewModel.Name</div>
+    <div class="col-4">@PersonViewModel.PersonInfo.CurrentHealth / @PersonViewModel.PersonInfo.MaxHealth</div>
+</div>
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: @PersonViewModel.DetermineHealthPercentage()%"></div>
+</div>
 
 @code {
     [Parameter]

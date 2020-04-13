@@ -21,5 +21,9 @@ namespace BattleAssistant.ViewModels
         public string Name { get; set; }
         public PersonInfoViewModel PersonInfo {get; set;}
 
+        public int DetermineHealthPercentage()
+        {
+            return (int)Math.Round((double)(100 * PersonInfo.CurrentHealth) / PersonInfo.MaxHealth);
+        }
     }
 }
