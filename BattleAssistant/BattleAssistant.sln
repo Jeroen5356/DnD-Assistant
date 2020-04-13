@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleAssistant", "BattleAssistant\BattleAssistant.csproj", "{13977F1E-DFC3-47DB-A84F-D45C1DE0A077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleAssistant", "BattleAssistant\BattleAssistant.csproj", "{13977F1E-DFC3-47DB-A84F-D45C1DE0A077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer.Entities", "DataLayer.Entities\DataLayer.Entities.csproj", "{D164EFFA-24FD-4E30-A187-564081F86E69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer.Entities", "DataLayer.Entities\DataLayer.Entities.csproj", "{D164EFFA-24FD-4E30-A187-564081F86E69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer.Migrations", "DataLayer.Migrations\DataLayer.Migrations.csproj", "{A50FCA68-B130-4F8B-863B-7CE6E34B5BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer.Migrations", "DataLayer.Migrations\DataLayer.Migrations.csproj", "{A50FCA68-B130-4F8B-863B-7CE6E34B5BDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

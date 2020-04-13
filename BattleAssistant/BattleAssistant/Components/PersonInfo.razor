@@ -1,0 +1,11 @@
+﻿@using ViewModels
+
+    <div class="row">
+        <div class="col-8">@PersonViewModel.Name (@PersonViewModel.PersonInfo.Level)</div>
+        <div class="col-4">@PersonViewModel.PersonInfo.CurrentHealth / @PersonViewModel.PersonInfo.MaxHealth</div>
+    </div>
+
+@code {
+    [Parameter]
+    public PersonViewModel PersonViewModel { get; set; }
+}

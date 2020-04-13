@@ -9,7 +9,7 @@
         <div class="container flex-column">
             @foreach (var personViewModel in TeamViewModel.PersonViewModels)
             {
-                <div class="col text-center">@personViewModel.Name</div>
+                <PersonInfo PersonViewModel="@personViewModel" />
             }
         </div>
     }
