@@ -27,6 +27,6 @@ namespace BattleAssistant.ViewModels
 
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public ICollection<PersonViewModel> PersonViewModels { get; set; }
+        public List<PersonViewModel> PersonViewModels { get; set; }
     }
 }

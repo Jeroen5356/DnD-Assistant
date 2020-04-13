@@ -4,6 +4,16 @@
 @if (TeamViewModel != null)
 {
     <h3>@TeamViewModel.Name</h3>
+    @if (TeamViewModel.PersonViewModels != null && TeamViewModel.PersonViewModels.Any())
+    {
+        <div class="container flex-column">
+            @foreach (var personViewModel in TeamViewModel.PersonViewModels)
+            {
+                <div class="col text-center">@personViewModel.Name</div>
+            }
+        </div>
+    }
+
 }
 
 
