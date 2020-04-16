@@ -18,8 +18,4 @@
     <ProjectReference Include="..\DataLayer.Migrations\DataLayer.Migrations.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\fonts\" />
-  </ItemGroup>
-
 </Project>
