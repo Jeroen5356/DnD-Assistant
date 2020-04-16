@@ -1,7 +1,11 @@
 using BattleAssistant.Hubs;
 using DataLayer.Entites;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,12 +26,23 @@ namespace BattleAssistant
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<IdentityContext>();
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<IdentityContext>();
+            services.AddSignalR();
+            services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddDbContext<DataContext>(options =>
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), o => o.MigrationsAssembly("DataLayer.Migrations")));
-            services.AddSignalR();
+            //services.AddAuthentication()
+            //    .AddDiscord(options =>
+            //    {
+            //        options.ClientId = "";
+            //        options.ClientSecret = "";
+            //    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,8 +64,12 @@ namespace BattleAssistant
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapHub<ConflictHub>("/conflictHub");
