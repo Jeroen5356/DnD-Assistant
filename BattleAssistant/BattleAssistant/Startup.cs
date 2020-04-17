@@ -26,7 +26,8 @@ namespace BattleAssistant
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<IdentityContext>();
+            services.AddDbContext<IdentityContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<IdentityContext>();
             services.AddSignalR();
@@ -37,6 +38,8 @@ namespace BattleAssistant
             services.AddDbContext<DataContext>(options =>
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), o => o.MigrationsAssembly("DataLayer.Migrations")));
+            
+            // TODO: find out how to hide secrets.
             //services.AddAuthentication()
             //    .AddDiscord(options =>
             //    {
