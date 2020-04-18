@@ -29,6 +29,7 @@ namespace BattleAssistant
             services.AddDbContext<IdentityContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"), o => o.MigrationsAssembly("DataLayer.Migrations")));
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>();
             services.AddSignalR();
             services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();

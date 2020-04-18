@@ -1,0 +1,24 @@
+﻿@page "/InitSuperAdmin"
+@using Microsoft.AspNetCore.Identity;
+@inject RoleManager<IdentityRole> _roleManager;
+@inject UserManager<IdentityUser> _userManager;
+<h3>InitSuperAdmin</h3>
+
+@code {  
+    protected override async Task OnInitializedAsync()
+    {
+        //TODO: store constants in some better place
+        var superAdminUser = await _userManager.FindByNameAsync("SuperAdmin");
+        if (superAdminUser == null)
+        {
+            superAdminUser = new IdentityUser("SuperAdmin");
+            await _userManager.CreateAsync(superAdminUser);
+        }
+        if(!await _roleManager.RoleExistsAsync("SuperAdmin"))
+        {
+            var superAdminRole = new IdentityRole("SuperAdmin");
+            await _roleManager.CreateAsync(superAdminRole);
+        }
+        await _userManager.AddToRoleAsync(superAdminUser, "SuperAdmin");
+    }
+}
