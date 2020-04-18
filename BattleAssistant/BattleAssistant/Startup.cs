@@ -27,7 +27,7 @@ namespace BattleAssistant
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"), o => o.MigrationsAssembly("DataLayer.Migrations")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<IdentityContext>();
             services.AddSignalR();
@@ -38,14 +38,13 @@ namespace BattleAssistant
             services.AddDbContext<DataContext>(options =>
                 options.UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), o => o.MigrationsAssembly("DataLayer.Migrations")));
-            
-            // TODO: find out how to hide secrets.
-            //services.AddAuthentication()
-            //    .AddDiscord(options =>
-            //    {
-            //        options.ClientId = "";
-            //        options.ClientSecret = "";
-            //    });
+
+            services.AddAuthentication()
+                .AddDiscord(options =>
+                {
+                    options.ClientId = Configuration["Discord:ClientID"];
+                    options.ClientSecret = Configuration["Discord:ClientSecret"];
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using ViewModels
 @using BattleAssistant.Components
+@attribute [Authorize]
 
     <div class="container justify-content-center">
         @if (_conflictViewModel == null)
