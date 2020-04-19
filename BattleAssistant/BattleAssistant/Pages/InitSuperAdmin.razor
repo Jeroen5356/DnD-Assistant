@@ -1,24 +1,126 @@
 ﻿@page "/InitSuperAdmin"
 @using Microsoft.AspNetCore.Identity;
+@using ViewModels;
 @inject RoleManager<IdentityRole> _roleManager;
 @inject UserManager<IdentityUser> _userManager;
 <h3>InitSuperAdmin</h3>
 
+@if (!_superAdminExists)
+{
+    <div class="alert alert-info">
+        Super Admin doesn't exist yet, choose a password and click submit to create him.
+    </div>
+    
+    <EditForm EditContext="@_editContext" OnSubmit="HandleSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary />
+        @if (_serverSideErrors.Any())
+        {
+            <ul>
+                @foreach (var serverSideErrorMessage in _serverSideErrors)
+                {
+                    <li>@serverSideErrorMessage</li>
+                }
+            </ul>
+        }
+        <div class="form-group">
+            <label>First password</label>
+            <InputText type="password" class="form-control" id="password" @bind-Value="_initSuperAdminViewModel.Password" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
+else{
+   <p>Super admin already exists</p>
+}
+
+
 @code {  
+
+    private bool _superAdminExists;
+    private InitSuperAdminViewModel _initSuperAdminViewModel = new InitSuperAdminViewModel();
+    private List<string> _serverSideErrors = new List<string>();
+    private EditContext _editContext;
+
     protected override async Task OnInitializedAsync()
     {
-        //TODO: store constants in some better place
-        var superAdminUser = await _userManager.FindByNameAsync("SuperAdmin");
-        if (superAdminUser == null)
+        _editContext = new EditContext(_initSuperAdminViewModel);
+        var superAdminUser = await _userManager.FindByNameAsync(Constants.SuperAdmin);
+        _superAdminExists = superAdminUser != null;
+    }
+
+    private async Task HandleSubmit()
+    {
+        var viewModelValid = _editContext.Validate();
+        if (viewModelValid)
         {
-            superAdminUser = new IdentityUser("SuperAdmin");
-            await _userManager.CreateAsync(superAdminUser);
+            var superAdmingCreated = await CreateSuperAdmin();
         }
-        if(!await _roleManager.RoleExistsAsync("SuperAdmin"))
+        StateHasChanged();
+    }
+
+    private async Task<bool> CreateSuperAdmin()
+    {
+        var totalErrors = new List<string>();
+        totalErrors.AddRange(await CreateSuperAdminUser());
+        totalErrors.AddRange(await CreateSuperAdminRole());
+        totalErrors.AddRange(await GiveUserTheRole());
+
+        _serverSideErrors = totalErrors;
+
+        return _serverSideErrors.Any();
+    }
+
+    private async Task<List<string>> CreateSuperAdminUser()
+    {
+        var errors = new List<string>();
+        if(await _userManager.FindByNameAsync(Constants.SuperAdmin) == null)
         {
-            var superAdminRole = new IdentityRole("SuperAdmin");
-            await _roleManager.CreateAsync(superAdminRole);
+            var superAdminUser = new IdentityUser(Constants.SuperAdmin);
+            superAdminUser.Email = Constants.SuperAdminEmail;
+            var viewmodel = (InitSuperAdminViewModel)_editContext.Model;
+            var createSuperAdminResult = await _userManager.CreateAsync(superAdminUser, viewmodel.Password);
+            if (!createSuperAdminResult.Succeeded)
+            {
+                errors.AddRange(createSuperAdminResult.Errors.Select(e => e.Description));
+            }
         }
-        await _userManager.AddToRoleAsync(superAdminUser, "SuperAdmin");
+        return errors;
+    }
+
+    private async Task<List<string>> CreateSuperAdminRole()
+    {
+        var errors = new List<string>();
+        if (!await _roleManager.RoleExistsAsync(Constants.SuperAdmin))
+        {
+            var superAdminRole = new IdentityRole(Constants.SuperAdmin);
+            var createSuperAdminRoleResult = await _roleManager.CreateAsync(superAdminRole);
+            if (!createSuperAdminRoleResult.Succeeded)
+            {
+                errors.AddRange(createSuperAdminRoleResult.Errors.Select(e => e.Description));
+            }
+        }
+
+        return errors;
+    }
+
+    private async Task<List<string>> GiveUserTheRole()
+    {
+        var errors = new List<string>();
+        var superAdminUsers = await _userManager.GetUsersInRoleAsync(Constants.SuperAdmin);
+        if (!superAdminUsers.Any(u => u.NormalizedUserName == Constants.SuperAdmin.ToUpper()))
+        {
+            var superAdmin = await _userManager.FindByNameAsync(Constants.SuperAdmin);
+            if(superAdmin != null)
+            {
+                var giveSuperAdminHisRoleResult = await _userManager.AddToRoleAsync(superAdmin, Constants.SuperAdmin);
+                if (!giveSuperAdminHisRoleResult.Succeeded)
+                {
+                    errors.AddRange(giveSuperAdminHisRoleResult.Errors.Select(e => e.Description));
+                }
+            }
+        }
+
+        return errors;
     }
 }
