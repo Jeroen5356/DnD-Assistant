@@ -7,7 +7,15 @@ namespace BattleAssistant
 {
     public static class Constants
     {
-        public const string SuperAdmin = "SuperAdmin";
-        public const string SuperAdminEmail = "SuperAdmin@mail.com";
+        public static class User
+        {
+            public const string SuperAdminEmailAndUserName = "SuperAdmin@mail.com";
+        }
+        
+        public static class Role
+        {
+            public const string SuperAdmin = "SuperAdmin";
+        }
+        
     }
 }

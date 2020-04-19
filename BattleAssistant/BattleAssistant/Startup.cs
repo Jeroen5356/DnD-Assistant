@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace BattleAssistant
 {
@@ -46,6 +47,12 @@ namespace BattleAssistant
                     options.ClientId = Configuration["Discord:ClientID"];
                     options.ClientSecret = Configuration["Discord:ClientSecret"];
                 });
+            ConfigureOwnServices(services);
+        }
+
+        private void ConfigureOwnServices(IServiceCollection services)
+        {
+            services.AddScoped<IIdentityManager, IdentityManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
