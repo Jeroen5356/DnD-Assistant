@@ -40,10 +40,17 @@ namespace BattleAssistant
             };
         }
 
-        public async Task<ManageUserViewModel> CreateManageUserViewModel(string userId)
+        public async Task<EditUserViewModel> CreateEditUserViewModel(string userId)
         {
             var user = await _identityManager.GetUser(userId);
-            return await CreateManageUserViewModelForUser(user);
+            var rolesOfUser = await _identityManager.GetRolesOfUser(user);
+            var allRoles = _identityManager.GetAllRoles();
+            
+            return new EditUserViewModel { 
+                UserName = user.UserName, 
+                AllRoles = allRoles.Select(r => r.Name).ToList(), 
+                RolesOfUser = rolesOfUser.ToList() 
+            };
         }
     }
 }

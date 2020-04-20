@@ -11,13 +11,16 @@ namespace BattleAssistant
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public IdentityManager(
             UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore)
+            IUserStore<IdentityUser> userStore,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
+            _roleManager = roleManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(IdentityUser user, string password, CancellationToken cancellationToken = default)
@@ -36,6 +39,11 @@ namespace BattleAssistant
         public List<IdentityUser> GetAllUsers()
         {
             return _userManager.Users.ToList();
+        }
+
+        public List<IdentityRole> GetAllRoles()
+        {
+            return _roleManager.Roles.ToList();
         }
 
         public async Task<IList<string>> GetRolesOfUser(IdentityUser user)

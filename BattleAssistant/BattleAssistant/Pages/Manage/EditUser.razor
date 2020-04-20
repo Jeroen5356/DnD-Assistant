@@ -1,15 +1,18 @@
 ﻿@page "/EditUser/{UserId}"
 @inject IViewModelFactory _viewModelFactory;
 
-@if(_manageUserViewModel != null)
+@if(_editUserViewModel != null)
 {
-    <h2>Edit User @_manageUserViewModel.UserName</h2>
+    <h2>Edit User @_editUserViewModel.UserName</h2>
 
     <form>
-        <div class="form-group">
-            <select class="form-control">
+        <div class="form-check">
+            @foreach (var role in _editUserViewModel.AllRoles)
+            {
+                <label class="form-check-label">@role</label>
+                <input type="checkbox" class="form-check-input" value="@role">
+            }
 
-            </select>
         </div>
     </form>
 }
@@ -18,11 +21,11 @@
 @code {
     [Parameter]
     public string UserId { get; set; }
-    private ManageUserViewModel _manageUserViewModel { get; set; }
+    private EditUserViewModel _editUserViewModel { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        _manageUserViewModel = await _viewModelFactory.CreateManageUserViewModel(UserId);
+        _editUserViewModel = await _viewModelFactory.CreateEditUserViewModel(UserId);
     }
 
 }

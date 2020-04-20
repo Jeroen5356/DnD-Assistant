@@ -7,6 +7,6 @@ namespace BattleAssistant
     public interface IViewModelFactory
     {
         Task<ManageUsersViewModel> CreateManageUsersViewModel();
-        Task<ManageUserViewModel> CreateManageUserViewModel(string userId);
+        Task<EditUserViewModel> CreateEditUserViewModel(string userId);
     }
 }
