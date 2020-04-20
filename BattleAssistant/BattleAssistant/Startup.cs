@@ -53,6 +53,7 @@ namespace BattleAssistant
         private void ConfigureOwnServices(IServiceCollection services)
         {
             services.AddScoped<IIdentityManager, IdentityManager>();
+            services.AddScoped<IViewModelFactory, ViewModelFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

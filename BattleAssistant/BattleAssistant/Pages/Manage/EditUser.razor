@@ -1,0 +1,28 @@
+﻿@page "/EditUser/{UserId}"
+@inject IViewModelFactory _viewModelFactory;
+
+@if(_manageUserViewModel != null)
+{
+    <h2>Edit User @_manageUserViewModel.UserName</h2>
+
+    <form>
+        <div class="form-group">
+            <select class="form-control">
+
+            </select>
+        </div>
+    </form>
+}
+
+
+@code {
+    [Parameter]
+    public string UserId { get; set; }
+    private ManageUserViewModel _manageUserViewModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _manageUserViewModel = await _viewModelFactory.CreateManageUserViewModel(UserId);
+    }
+
+}

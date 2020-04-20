@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +9,15 @@ namespace BattleAssistant
 {
     public class IdentityManager : IIdentityManager
     {
-        //private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
-        //private readonly IUserEmailStore<IdentityUser> _emailStore;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        //private readonly ILogger<IdentityManager<TUser>> _logger;
-        //private readonly IEmailSender _emailSender;
 
         public IdentityManager(
             UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            //IUserEmailStore<IdentityUser> emailStore,
-            RoleManager<IdentityRole> roleManager)
+            IUserStore<IdentityUser> userStore)
         {
             _userManager = userManager;
             _userStore = userStore;
-            //_emailStore = emailStore;
-            _roleManager = roleManager;
         }
 
         public async Task<IdentityResult> AddUserAsync(IdentityUser user, string password, CancellationToken cancellationToken = default)
@@ -36,13 +25,27 @@ namespace BattleAssistant
             try
             {
                 await _userStore.SetUserNameAsync(user, user.Email, cancellationToken);
-                //await _emailStore.SetEmailAsync(user, user.Email, cancellationToken);
                 return await _userManager.CreateAsync(user, password);
             }
             catch (Exception ex)
             {
                 return IdentityResult.Failed(new IdentityError[] { new IdentityError { Description = ex.Message } });
             }
+        }
+
+        public List<IdentityUser> GetAllUsers()
+        {
+            return _userManager.Users.ToList();
+        }
+
+        public async Task<IList<string>> GetRolesOfUser(IdentityUser user)
+        {
+            return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task<IdentityUser> GetUser(string id)
+        {
+            return await _userManager.FindByIdAsync(id.ToString());
         }
     }
 }
