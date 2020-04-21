@@ -3,18 +3,26 @@
 
 @if(_editUserViewModel != null)
 {
-    <h2>Edit User @_editUserViewModel.UserName</h2>
+    <div class="row justify-content-center">
+        <h2>Edit roles of @_editUserViewModel.UserName</h2>
+    </div>
+    <div class="row justify-content-start">
+        
+        <EditForm Model="_editUserViewModel" OnValidSubmit="HandleValidSubmit">
+            <div class="form-check">
+                @foreach (var role in _editUserViewModel.AllRoles)
+                {
+                    //TODO: make this work somehow
+                    <InputCheckbox @bind-Value="_editUserViewModel.Test(role)" />
+                    <label class="form-check-label">@role</label>
+                }
 
-    <form>
-        <div class="form-check">
-            @foreach (var role in _editUserViewModel.AllRoles)
-            {
-                <label class="form-check-label">@role</label>
-                <input type="checkbox" class="form-check-input" value="@role">
-            }
+            </div>
+        </EditForm>
+    </div>
+    
 
-        </div>
-    </form>
+    
 }
 
 
@@ -28,4 +36,26 @@
         _editUserViewModel = await _viewModelFactory.CreateEditUserViewModel(UserId);
     }
 
+    private void HandleValidSubmit()
+    {
+
+    }
+
+    void CheckBoxClicked(string role, object value)
+    {
+        if ((bool)value)
+        {
+            if (!_editUserViewModel.RolesOfUser.Contains(role))
+            {
+                _editUserViewModel.RolesOfUser.Add(role);
+            }
+        }
+        else
+        {
+            if (_editUserViewModel.RolesOfUser.Contains(role))
+            {
+                _editUserViewModel.RolesOfUser.Remove(role);
+            }
+        }
+    }
 }
