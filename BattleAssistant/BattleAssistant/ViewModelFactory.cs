@@ -45,11 +45,17 @@ namespace BattleAssistant
             var user = await _identityManager.GetUser(userId);
             var rolesOfUser = await _identityManager.GetRolesOfUser(user);
             var allRoles = _identityManager.GetAllRoles();
-            
+
+            var userIsInRole = new List<UserRole>();
+            allRoles.ForEach(r => userIsInRole.Add(
+                new UserRole { 
+                    RoleName = r.Name, 
+                    UserIsInRole = rolesOfUser.Contains(r.Name) }
+                ));
+
             return new EditUserViewModel { 
                 UserName = user.UserName, 
-                AllRoles = allRoles.Select(r => r.Name).ToList(), 
-                RolesOfUser = rolesOfUser.ToList() 
+                UserIsInRole = userIsInRole
             };
         }
     }

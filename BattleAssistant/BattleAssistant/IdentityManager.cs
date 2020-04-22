@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BattleAssistant.Pages.Manage;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,5 +56,26 @@ namespace BattleAssistant
         {
             return await _userManager.FindByIdAsync(id.ToString());
         }
+
+        public async Task ChangeRolesOfUser(string username, List<UserRole> roles)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+            var taskList = new List<Task>();
+            foreach (var role in roles.Where(r => !r.UserIsInRole))
+            {
+                taskList.Add(_userManager.RemoveFromRoleAsync(user, role.RoleName));
+            }
+            foreach (var role in roles.Where(r => r.UserIsInRole))
+            {
+                taskList.Add(_userManager.AddToRoleAsync(user, role.RoleName));
+            }
+
+            WaitAll(taskList);
+        }
+
+        //public static void WaitAll(this IEnumerable<Task> tasks)
+        //{
+        //    Task.WaitAll(tasks.ToArray());
+        //}
     }
 }

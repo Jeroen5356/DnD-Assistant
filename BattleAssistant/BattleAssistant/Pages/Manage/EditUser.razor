@@ -1,5 +1,6 @@
 ﻿@page "/EditUser/{UserId}"
 @inject IViewModelFactory _viewModelFactory;
+@inject IIdentityManager _identityManager;
 
 @if(_editUserViewModel != null)
 {
@@ -10,13 +11,13 @@
         
         <EditForm Model="_editUserViewModel" OnValidSubmit="HandleValidSubmit">
             <div class="form-check">
-                @foreach (var role in _editUserViewModel.AllRoles)
+                @foreach (var role in _editUserViewModel.UserIsInRole)
                 {
-                    //TODO: make this work somehow
-                    <InputCheckbox @bind-Value="_editUserViewModel.Test(role)" />
-                    <label class="form-check-label">@role</label>
+                    <input type="checkbox" @bind="role.UserIsInRole" />
+                    <label class="form-check-label">@role.RoleName</label>
                 }
 
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </EditForm>
     </div>
@@ -38,24 +39,25 @@
 
     private void HandleValidSubmit()
     {
+        _identityManager.
 
     }
 
-    void CheckBoxClicked(string role, object value)
-    {
-        if ((bool)value)
-        {
-            if (!_editUserViewModel.RolesOfUser.Contains(role))
-            {
-                _editUserViewModel.RolesOfUser.Add(role);
-            }
-        }
-        else
-        {
-            if (_editUserViewModel.RolesOfUser.Contains(role))
-            {
-                _editUserViewModel.RolesOfUser.Remove(role);
-            }
-        }
-    }
+    //void CheckBoxClicked(string role, object value)
+    //{
+    //    if ((bool)value)
+    //    {
+    //        if (!_editUserViewModel.RolesOfUser.Contains(role))
+    //        {
+    //            _editUserViewModel.RolesOfUser.Add(role);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (_editUserViewModel.RolesOfUser.Contains(role))
+    //        {
+    //            _editUserViewModel.RolesOfUser.Remove(role);
+    //        }
+    //    }
+    //}
 }

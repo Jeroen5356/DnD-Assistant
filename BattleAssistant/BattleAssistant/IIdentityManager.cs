@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BattleAssistant.Pages.Manage;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,5 +14,6 @@ namespace BattleAssistant
         List<IdentityRole> GetAllRoles();
         Task<IList<string>> GetRolesOfUser(IdentityUser user);
         Task<IdentityUser> GetUser(string id);
+        Task ChangeRolesOfUser(string username, List<UserRole> roles);
     }
 }

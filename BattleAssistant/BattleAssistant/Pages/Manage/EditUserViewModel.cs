@@ -4,9 +4,22 @@ namespace BattleAssistant.Pages.Manage
 {
     public class EditUserViewModel
     {
-        public string UserName { get; set; }
-        public List<string> RolesOfUser { get; set; }
-        public List<string> AllRoles { get; set; }
+        public EditUserViewModel()
+        {
+            UserIsInRole = new List<UserRole>();
+        }
 
+        public string UserName { get; set; }
+
+        public List<UserRole> UserIsInRole { get; set; }
+
+        
+
+    }
+
+    public class UserRole
+    {
+        public string RoleName { get; set; }
+        public bool UserIsInRole { get; set; }
     }
 }
