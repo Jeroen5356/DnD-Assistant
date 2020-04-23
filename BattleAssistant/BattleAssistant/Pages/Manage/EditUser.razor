@@ -37,9 +37,9 @@
         _editUserViewModel = await _viewModelFactory.CreateEditUserViewModel(UserId);
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleValidSubmit()
     {
-        _identityManager.
+        await _identityManager.ChangeRolesOfUser(_editUserViewModel.UserName, _editUserViewModel.UserIsInRole);
 
     }
 

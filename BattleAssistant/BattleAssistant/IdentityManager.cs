@@ -70,12 +70,7 @@ namespace BattleAssistant
                 taskList.Add(_userManager.AddToRoleAsync(user, role.RoleName));
             }
 
-            WaitAll(taskList);
+            await Task.WhenAll(taskList);
         }
-
-        //public static void WaitAll(this IEnumerable<Task> tasks)
-        //{
-        //    Task.WaitAll(tasks.ToArray());
-        //}
     }
 }
