@@ -2,13 +2,13 @@
 @inject IViewModelFactory _viewModelFactory;
 @inject IIdentityManager _identityManager;
 
-@if(_editUserViewModel != null)
+@if (_editUserViewModel != null)
 {
     <div class="row justify-content-center">
         <h2>Edit roles of @_editUserViewModel.UserName</h2>
     </div>
     <div class="row justify-content-start">
-        
+
         <EditForm Model="_editUserViewModel" OnValidSubmit="HandleValidSubmit">
             <div class="form-check">
                 @foreach (var role in _editUserViewModel.UserIsInRole)
@@ -21,9 +21,15 @@
             </div>
         </EditForm>
     </div>
-    
 
-    
+
+    <div class="@(displaySuccessAlert ? "" : "d-none") alert alert-success alert-dismissible fade show" id="EditUserAlert" role="alert">
+        @successAlertMessage
+        <button type="button" class="close" aria-label="Close" @onclick="DisableSucessAlert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
 }
 
 
@@ -31,6 +37,8 @@
     [Parameter]
     public string UserId { get; set; }
     private EditUserViewModel _editUserViewModel { get; set; }
+    private string successAlertMessage { get; set; }
+    private bool displaySuccessAlert { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,24 +48,12 @@
     private async Task HandleValidSubmit()
     {
         await _identityManager.ChangeRolesOfUser(_editUserViewModel.UserName, _editUserViewModel.UserIsInRole);
-
+        successAlertMessage = $"{_editUserViewModel.UserName} edited.";
+        displaySuccessAlert = true;
     }
 
-    //void CheckBoxClicked(string role, object value)
-    //{
-    //    if ((bool)value)
-    //    {
-    //        if (!_editUserViewModel.RolesOfUser.Contains(role))
-    //        {
-    //            _editUserViewModel.RolesOfUser.Add(role);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (_editUserViewModel.RolesOfUser.Contains(role))
-    //        {
-    //            _editUserViewModel.RolesOfUser.Remove(role);
-    //        }
-    //    }
-    //}
+    private void DisableSucessAlert(MouseEventArgs e)
+    {
+        displaySuccessAlert = false;
+    }
 }
